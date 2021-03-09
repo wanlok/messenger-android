@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.wanlok.messenger.common.model.Friend
 
 class FriendListVM: ViewModel() {
-
     val friends = MutableLiveData<ArrayList<Friend>>()
 
     fun reload() {

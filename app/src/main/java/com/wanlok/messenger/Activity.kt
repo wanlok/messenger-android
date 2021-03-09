@@ -1,36 +1,32 @@
 package com.wanlok.messenger
 
 import android.os.Bundle
-import android.os.Messenger
-import android.util.Log
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.nameText
+import com.wanlok.messenger.common.WActivity
+import com.wanlok.messenger.common.WNavigationFragment
 import kotlinx.android.synthetic.main.activity.*
 
-class Activity : AppCompatActivity() {
-
-    fun push(fragment: Fragment) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.ll_content, fragment)
-        fragmentTransaction.commit()
-    }
-
+class Activity: WActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            slider.drawerLayout?.let { drawerLayout ->
-                if (drawerLayout.isOpen) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                } else {
-                    drawerLayout.openDrawer(GravityCompat.START)
+        navigationFragment?.let { navigationFragment ->
+            if (navigationFragment.isRoot()) {
+                if (item.itemId == android.R.id.home) {
+                    slider.drawerLayout?.let { drawerLayout ->
+                        if (drawerLayout.isOpen) {
+                            drawerLayout.closeDrawer(GravityCompat.START)
+                        } else {
+                            drawerLayout.openDrawer(GravityCompat.START)
+                        }
+                    }
+                    return true
                 }
+            } else {
+                onBackPressed()
+                return true
             }
-            return true
         }
         return super.onOptionsItemSelected(item)
     }
@@ -39,12 +35,9 @@ class Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_menu))
-
         val drawerItems = arrayOf(
             PrimaryDrawerItem().apply { nameText = "Friends" },
-            PrimaryDrawerItem().apply { nameText = "Travel" }
+            PrimaryDrawerItem().apply { nameText = "About" }
         )
 
         for (i in drawerItems.indices) {
@@ -62,6 +55,6 @@ class Activity : AppCompatActivity() {
             false
         }
 
-        push(FriendListFragment())
+        push(WNavigationFragment(FriendListFragment()))
     }
 }

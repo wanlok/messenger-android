@@ -1,22 +1,19 @@
 package com.wanlok.messenger
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wanlok.messenger.common.WFragment
 import com.wanlok.messenger.common.model.Friend
 import kotlinx.android.synthetic.main.fragment_friend_list.*
 
-class FriendListFragment: Fragment() {
-
+class FriendListFragment: WFragment() {
     val friendListVM = FriendListVM()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_friend_list, container, false)
     }
 
@@ -32,17 +29,14 @@ class FriendListFragment: Fragment() {
             }
         })
 
+        title("Friends")
+
         friendListVM.reload()
     }
 
     fun onFriendItemViewClick(friend: Friend) {
-        Log.v("HELLO_WORLD", "friend " + friend.name)
-        (activity as? Activity)?.push(MessengerFragment())
-
-//        childFragmentManager?.let {
-//            val fragmentTransaction = it.beginTransaction()
-//            fragmentTransaction.add(R.id.ll_content, MessengerFragment())
-//            fragmentTransaction.commit()
-//        }
+        val messengerFragment = MessengerFragment()
+        messengerFragment.messengerVM.friend = friend
+        push(messengerFragment)
     }
 }
