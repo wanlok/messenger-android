@@ -2,6 +2,7 @@ package com.wanlok.messenger.common
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,12 +55,26 @@ class WNavigationFragment(var rootFragment: WFragment): Fragment() {
         }
     }
 
+    fun peek() {
+        if (isAdded) {
+            val fragment = fragments.last()
+            val fragmentTransaction = childFragmentManager.beginTransaction()
+            fragmentTransaction.replace(R.id.fl_root, fragment)
+            fragmentTransaction.commit()
+            title(fragment.title)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_root, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        push(rootFragment)
+        if (fragments.size == 0) {
+            push(rootFragment)
+        } else {
+            peek()
+        }
     }
 }

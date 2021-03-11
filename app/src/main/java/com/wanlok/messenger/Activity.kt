@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity.*
 
 class Activity: WActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        navigationFragment?.let { navigationFragment ->
+        currentNavigationFragment?.let { navigationFragment ->
             if (navigationFragment.isRoot()) {
                 if (item.itemId == android.R.id.home) {
                     slider.drawerLayout?.let { drawerLayout ->
@@ -35,6 +35,11 @@ class Activity: WActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity)
 
+        navigationFragments.add(WNavigationFragment(FriendListFragment()))
+        navigationFragments.add(WNavigationFragment(MessengerFragment()))
+
+        val position = 0
+
         val drawerItems = arrayOf(
             PrimaryDrawerItem().apply { nameText = "Friends" },
             PrimaryDrawerItem().apply { nameText = "About" }
@@ -43,18 +48,16 @@ class Activity: WActivity() {
         for (i in drawerItems.indices) {
             val drawerItem = drawerItems[i]
             slider.itemAdapter.add(drawerItem)
-            if (i == 0) {
+            if (i == position) {
                 drawerItem.isSelected = true
-                title = drawerItem.name?.textString
             }
         }
 
         slider.onDrawerItemClickListener = { _, _, position ->
-            val drawerItem = drawerItems[position]
-            title = drawerItem.name?.textString
+            select(navigationFragments[position])
             false
         }
 
-        push(WNavigationFragment(FriendListFragment()))
+        select(navigationFragments[position])
     }
 }

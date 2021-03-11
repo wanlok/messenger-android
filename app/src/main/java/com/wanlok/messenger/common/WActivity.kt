@@ -1,19 +1,21 @@
 package com.wanlok.messenger.common
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.wanlok.messenger.R
 
 open class WActivity: AppCompatActivity() {
-    var navigationFragment: WNavigationFragment? = null
+    var navigationFragments = ArrayList<WNavigationFragment>()
+    var currentNavigationFragment: WNavigationFragment? = null
 
     override fun onBackPressed() {
-        navigationFragment?.pop()
+        currentNavigationFragment?.pop()
     }
 
-    fun push(navigationFragment: WNavigationFragment) {
+    fun select(navigationFragment: WNavigationFragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.ll_content, navigationFragment)
+        fragmentTransaction.replace(R.id.ll_content, navigationFragment)
         fragmentTransaction.commit()
-        this.navigationFragment = navigationFragment
+        currentNavigationFragment = navigationFragment
     }
 }
