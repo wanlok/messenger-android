@@ -53,4 +53,10 @@ dependencies {
     implementation "com.mikepenz:materialdrawer:8.3.3"
     implementation "com.mikepenz:materialdrawer-nav:8.3.3"
     implementation "com.mikepenz:materialdrawer-iconics:8.3.3"
+
+    implementation ('io.socket:socket.io-client:0.8.3') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    implementation 'com.android.volley:volley:1.2.0'
 }
